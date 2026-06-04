@@ -593,6 +593,7 @@
   var currentPage= 1;
   var totalPages = 1;
   var allPostsCache = {};   // cache pr. kategori+side
+  var shownPostIds  = {};   // deduplication: track viste post-IDs
 
   /* =============================================
      Hjælpefunktioner
@@ -800,6 +801,7 @@
       // Featured: kun første post, kun på side 1, kun ved "All"
       if (currentPage === 1 && currentCat === 0) {
         var featured = posts[0];
+        shownPostIds[featured.id] = true; // markér featured som vist
         var gridPosts = posts.slice(1);
         featuredWrap.innerHTML = '';
         featuredWrap.appendChild(buildFeaturedCard(featured));
@@ -823,11 +825,15 @@
   }
 
   function renderGridPosts(posts, reset) {
-    if (reset) blogGrid.innerHTML = '';
+    if (reset) { blogGrid.innerHTML = ''; shownPostIds = {}; }
+    var added = 0;
     posts.forEach(function(post) {
+      if (shownPostIds[post.id]) return; // skip duplikater
+      shownPostIds[post.id] = true;
       blogGrid.appendChild(buildGridCard(post));
+      added++;
     });
-    gridSection.style.display = posts.length ? '' : 'none';
+    if (blogGrid.children.length > 0) gridSection.style.display = '';
   }
 
   /* =============================================
