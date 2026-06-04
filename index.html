@@ -760,11 +760,7 @@
       return;
     }
 
-    // side 1 henter +1 ekstra for featured (kun ved "All" / catId=0)
-    var isFeaturedPage = (page === 1 && catId === 0);
-    var fetchCount = isFeaturedPage ? PER_PAGE + 1 : PER_PAGE;
-
-    var url = apiBase + '/posts?_embed&per_page=' + fetchCount + '&page=' + page;
+    var url = apiBase + '/posts?_embed&per_page=' + PER_PAGE + '&page=' + page;
     if (catId) url += '&categories=' + catId;
 
     fetch(url)
