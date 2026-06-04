@@ -390,26 +390,87 @@
   to { background-position: -200% 0; }
 }
 
+/* ===== HAMBURGER MENU ===== */
+.mlb-hamburger {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  padding: 0.5rem; color: rgba(255,253,247,0.9);
+  flex-direction: column; gap: 5px;
+}
+.mlb-nav.scrolled .mlb-hamburger { color: #2C3E35; }
+.mlb-hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: currentColor; border-radius: 2px;
+  transition: all 0.25s ease;
+}
+.mlb-mobile-menu {
+  display: none;
+  position: fixed; top: 68px; left: 0; right: 0;
+  background: rgba(255,253,247,0.98);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(26,127,168,0.1);
+  padding: 1rem; flex-direction: column; gap: 0.3rem;
+  z-index: 199;
+}
+.mlb-mobile-menu.open { display: flex; }
+.mlb-mobile-menu a {
+  display: block; padding: 0.75rem 1rem;
+  color: #2C3E35; text-decoration: none;
+  font-size: 1rem; font-weight: 500;
+  border-radius: 10px; font-family: 'Inter', sans-serif;
+  transition: background 0.15s;
+}
+.mlb-mobile-menu a:hover { background: rgba(26,127,168,0.07); }
+.mlb-mobile-divider { height: 1px; background: rgba(26,127,168,0.1); margin: 0.3rem 0; }
+.mlb-mobile-btn-app {
+  display: block !important; text-align: center;
+  background: linear-gradient(135deg, #1A7FA8, #0D5C7A) !important;
+  color: #FFFDF7 !important; padding: 0.85rem 1rem !important;
+  border-radius: 50px !important; font-weight: 700 !important;
+  font-size: 0.95rem !important; margin-top: 0.3rem;
+}
+.mlb-mobile-btn-buy {
+  display: block !important; text-align: center;
+  background: #FFE066 !important; color: #0D5C7A !important;
+  padding: 0.85rem 1rem !important; border-radius: 50px !important;
+  font-weight: 800 !important; font-size: 0.95rem !important;
+  margin-top: 0.3rem;
+}
+
 /* ===== TABLET ===== */
 @media (max-width: 1024px) {
-  .ml-blog-root .newsletter-inner { flex-direction: column; align-items: flex-start; gap: 24px; }
-  .ml-blog-root .newsletter-form  { width: 100%; }
-  .ml-blog-root .newsletter-form input { flex: 1; width: auto; }
+  .mlb-nav { padding: 0 1.5rem; }
+  .ml-blog-root .blog-grid { grid-template-columns: 1fr; }
+  .ml-blog-root .mlb-container { padding: 0 16px; }
 }
 
 /* ===== MOBILE ===== */
-@media (max-width: 680px) {
-  .ml-blog-root { --section-gap: 64px; }
-  .ml-blog-root .blog-hero  { padding: 64px 0 44px; }
-  .ml-blog-root .hero-title { font-size: 34px; }
-  .ml-blog-root .hero-desc  { font-size: 15px; }
+@media (max-width: 768px) {
+  .mlb-nav { padding: 0 1rem; }
+  .mlb-nav-links { display: none; }
+  .mlb-hamburger { display: flex; }
+
+  .mlb-nav + .ml-blog-root .blog-hero { padding-top: 120px; }
+
+  .ml-blog-root { --section-gap: 56px; }
+  .ml-blog-root .mlb-container { padding: 0 16px; }
+  .ml-blog-root .blog-hero  { padding: 56px 0 36px; }
+  .ml-blog-root .hero-title { font-size: clamp(26px, 8vw, 36px); }
+  .ml-blog-root .hero-desc  { font-size: 15px; padding: 0 8px; }
+  .ml-blog-root .filter-pills { gap: 8px; padding: 0 8px; }
+  .ml-blog-root .pill { font-size: 12px; padding: 6px 14px; }
+
+  .ml-blog-root .featured-card  { min-height: 320px; }
+  .ml-blog-root .featured-body  { padding: 20px; gap: 8px; }
+  .ml-blog-root .featured-title { font-size: 18px; }
+  .ml-blog-root .featured-excerpt { display: none; }
+
   .ml-blog-root .blog-grid  { grid-template-columns: 1fr; }
   .ml-blog-root .skeleton-grid { grid-template-columns: 1fr; }
-  .ml-blog-root .featured-card  { min-height: 380px; }
-  .ml-blog-root .featured-body  { padding: 24px; }
-  .ml-blog-root .featured-title { font-size: 20px; }
-  .ml-blog-root .newsletter-form { flex-direction: column; }
-  .ml-blog-root .newsletter-form input { width: 100%; }
+  .ml-blog-root .blog-card { min-height: 260px; }
+
+  .ml-blog-root .card-title { font-size: 16px; }
+  .ml-blog-root .skeleton-featured { height: 300px; }
 }
 </style>
 
@@ -423,7 +484,7 @@
   <div class="mlb-nav-links">
     <a href="https://www.mantalogger.com/#demo">Demo</a>
     <a href="https://www.mantalogger.com/#pricing">Pricing</a>
-    <a href="https://www.mantalogger.com/blog">Blog</a>
+    <a href="https://blog.mantalogger.com">Blog</a>
     <div class="mlb-contact-wrap">
       <button class="mlb-nav-contact-btn">
         Contact
@@ -439,7 +500,23 @@
     <a href="https://app.mantalogger.com" target="_blank" rel="noopener noreferrer" class="mlb-btn-app">Open MantaLogger</a>
     <a href="https://buy.stripe.com/fZubJ15zF0m00l6fhM1wY01" target="_blank" rel="noopener noreferrer" class="mlb-btn-buy">Buy Now</a>
   </div>
+  <!-- Hamburger -->
+  <button class="mlb-hamburger" id="mlbHamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile menu -->
+<div class="mlb-mobile-menu" id="mlbMobileMenu">
+  <a href="https://www.mantalogger.com/#demo">Demo</a>
+  <a href="https://www.mantalogger.com/#pricing">Pricing</a>
+  <a href="https://blog.mantalogger.com">Blog</a>
+  <a href="mailto:contact@mantalogger.com">Contact via Email</a>
+  <a href="https://wa.me/4529122528">Chat on WhatsApp</a>
+  <div class="mlb-mobile-divider"></div>
+  <a href="https://app.mantalogger.com" target="_blank" rel="noopener noreferrer" class="mlb-mobile-btn-app">Open MantaLogger</a>
+  <a href="https://buy.stripe.com/fZubJ15zF0m00l6fhM1wY01" target="_blank" rel="noopener noreferrer" class="mlb-mobile-btn-buy">Buy Now</a>
+</div>
 
 <div class="ml-blog-root" id="mlbRoot">
 
@@ -786,16 +863,44 @@
 })();
 
 /* =============================================
-   Navbar scroll effect
+   Navbar scroll effect + hamburger
    ============================================= */
 (function () {
-  var nav = document.getElementById('mlbNav');
+  var nav     = document.getElementById('mlbNav');
+  var burger  = document.getElementById('mlbHamburger');
+  var mobileMenu = document.getElementById('mlbMobileMenu');
   if (!nav) return;
+
   function onScroll() {
     if (window.scrollY > 40) nav.classList.add('scrolled');
     else nav.classList.remove('scrolled');
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  if (burger && mobileMenu) {
+    burger.addEventListener('click', function () {
+      var isOpen = mobileMenu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', isOpen);
+      // Animate to X
+      var spans = burger.querySelectorAll('span');
+      if (isOpen) {
+        spans[0].style.cssText = 'transform: translateY(7px) rotate(45deg)';
+        spans[1].style.cssText = 'opacity: 0';
+        spans[2].style.cssText = 'transform: translateY(-7px) rotate(-45deg)';
+      } else {
+        spans[0].style.cssText = '';
+        spans[1].style.cssText = '';
+        spans[2].style.cssText = '';
+      }
+    });
+    // Close menu on link click
+    mobileMenu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        mobileMenu.classList.remove('open');
+        burger.querySelectorAll('span').forEach(function(s){ s.style.cssText = ''; });
+      });
+    });
+  }
 })();
 </script>
